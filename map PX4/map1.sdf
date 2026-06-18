@@ -1,0 +1,188 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <world name="map1">
+
+    <physics name="4ms" type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <gravity>0 0 -9.80665</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type="adiabatic"/>
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+    <plugin filename="gz-sim-magnetometer-system" name="gz::sim::systems::Magnetometer"/>
+    <plugin filename="gz-sim-air-pressure-system" name="gz::sim::systems::AirPressure"/>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.95 0.95 0.95 1</diffuse>
+      <specular>0.25 0.25 0.25 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>0 0 -1</direction>
+    </light>
+
+    <scene>
+      <grid>true</grid>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>47.397971057728974</latitude_deg>
+      <longitude_deg>8.546163739800146</longitude_deg>
+      <elevation>0</elevation>
+    </spherical_coordinates>
+
+    <!-- Ground plane -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.75 0.75 0.78 1</ambient>
+            <diffuse>0.75 0.75 0.78 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Walls to make the road 20m wide (from y=-10 to y=10) -->
+    <!-- Road length 60m (from x=-10 to x=50) -->
+    <model name="wall_left">
+      <static>true</static>
+      <pose>20 10 1 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>60 0.5 2</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>60 0.5 2</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_right">
+      <static>true</static>
+      <pose>20 -10 1 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>60 0.5 2</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>60 0.5 2</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_front">
+      <static>true</static>
+      <pose>-10 0 1 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>0.5 20.5 2</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>0.5 20.5 2</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_back">
+      <static>true</static>
+      <pose>50 0 1 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>0.5 20.5 2</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>0.5 20.5 2</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Oto (Car) -->
+    <include>
+      <pose>30 0 0 0 0 1.5708</pose>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/SUV</uri>
+      <name>car</name>
+    </include>
+
+    <!-- Nguoi (Person) -->
+    <include>
+      <pose>20 0 0 0 0 0</pose>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Casual female</uri>
+      <name>person</name>
+    </include>
+
+    <!-- Xe dap (Bicycle) -->
+    <include>
+      <pose>10 0 0 0 0 0</pose>
+      <uri>https://fuel.gazebosim.org/1.0/athackst/models/bicycle</uri>
+      <name>bicycle</name>
+    </include>
+
+        <!--gaubong -->
+    <!-- <include>
+      <pose>35 0 0 0 0 0</pose>
+      <uri>https://fuel.gazebosim.org/1.0/GoogleResearch/models/Dog</uri>
+      <name>dog</name>
+    </include> -->
+  
+
+    <!-- Xe oto
+    <include>
+      <pose>40 0 0 0 0 5708</pose>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Pickup</uri>
+      <name>pickup</name>
+    </include> -->
+
+  </world>
+</sdf>

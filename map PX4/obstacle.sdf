@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.9">
+  <world name="obstacle">
+
+    <physics name="4ms" type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <gravity>0 0 -9.80665</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type="adiabatic"/>
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+    <plugin filename="gz-sim-magnetometer-system" name="gz::sim::systems::Magnetometer"/>
+    <plugin filename="gz-sim-air-pressure-system" name="gz::sim::systems::AirPressure"/>
+
+    
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.95 0.95 0.95 1</diffuse>
+      <specular>0.25 0.25 0.25 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <scene>
+      <grid>true</grid>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>47.397971057728974</latitude_deg>
+      <longitude_deg>8.546163739800146</longitude_deg>
+      <elevation>0</elevation>
+    </spherical_coordinates>
+
+    <!-- Ground plane 200x200m -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.75 0.75 0.78 1</ambient>
+            <diffuse>0.75 0.75 0.78 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- =============================================================== -->
+    <!--   Walled arena: 40x40 m enclosure with internal rooms           -->
+    <!--   Tường bao ngoài: ±20m mỗi hướng (tổng 40×40m)              -->
+    <!--   Hành lang tối thiểu: ~4m (an toàn cho xe 0.7m rộng)        -->
+    <!-- =============================================================== -->
+
+    <!-- Outer wall: NORTH (y=+20) -->
+    <model name="wall_n">
+      <static>true</static>
+      <pose>0 20 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>40.4 0.4 1.5</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>40.4 0.4 1.5</size></box></geometry>
+          <material>
+            <ambient>0.55 0.55 0.60 1</ambient>
+            <diffuse>0.55 0.55 0.60 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Outer wall: SOUTH (y=-20) -->
+    <model name="wall_s">
+      <static>true</static>
+      <pose>0 -20 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>40.4 0.4 1.5</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>40.4 0.4 1.5</size></box></geometry>
+          <material>
+            <ambient>0.55 0.55 0.60 1</ambient>
+            <diffuse>0.55 0.55 0.60 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Outer wall: EAST (x=+20) -->
+    <model name="wall_e">
+      <static>true</static>
+      <pose>20 0 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>0.4 40.4 1.5</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>0.4 40.4 1.5</size></box></geometry>
+          <material>
+            <ambient>0.55 0.55 0.60 1</ambient>
+            <diffuse>0.55 0.55 0.60 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Outer wall: WEST (x=-20) -->
+    <model name="wall_w">
+      <static>true</static>
+      <pose>-20 0 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>0.4 40.4 1.5</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>0.4 40.4 1.5</size></box></geometry>
+          <material>
+            <ambient>0.55 0.55 0.60 1</ambient>
+            <diffuse>0.55 0.55 0.60 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ─── Internal walls ──────────────────────────────────────────── -->
+    <!-- Mỗi gap trong tường nội bộ tối thiểu 4m để xe 0.7m lưu thông  -->
+
+    <!-- wall_i1: Tường dọc bên Tây, chia vùng TN-TT
+         Từ y=-20 đến y=-6 (dài 14m), gap 4m ở y=-6→-2, tiếp tục y=-2→+4 (dài 6m)
+         Đặt tại x=-7 thay vì x=-3 để tạo phòng rộng hơn -->
+  
+    <!-- Gap i1: y=-6→-2 (4m) tại x=-7 để xe qua -->
+
+    <!-- wall_i2: Tường dọc bên Đông
+         Tại x=+7, từ y=+4 đến y=+20 (dài 16m)
+         Gap ở y=+4→0 (4m) để xe đi qua -->
+    <model name="wall_i2">
+      <static>true</static>
+      <pose>7.0 12.0 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>0.3 16.0 1.5</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>0.3 16.0 1.5</size></box></geometry>
+          <material>
+            <ambient>0.60 0.58 0.55 1</ambient>
+            <diffuse>0.60 0.58 0.55 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <!-- Gap i2: y=0→+4 (4m) tại x=+7 -->
+
+    <!-- wall_i3: Tường ngang phía Tây-Bắc
+         Tại y=+7, từ x=-20 đến x=-11 (dài 9m)
+         Gap ở x=-11→-7 (4m) để xe đi qua sang vùng TN -->
+    <model name="wall_i3">
+      <static>true</static>
+      <pose>-15.5 7.0 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>9.0 0.3 1.5</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>9.0 0.3 1.5</size></box></geometry>
+          <material>
+            <ambient>0.60 0.58 0.55 1</ambient>
+            <diffuse>0.60 0.58 0.55 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <!-- Gap i3: x=-11→-7 (4m) tại y=+7 -->
+
+    <!-- wall_i4: Tường ngang phía Đông-Nam
+         Tại y=-7, từ x=+11 đến x=+20 (dài 9m)
+         Gap ở x=+7→+11 (4m) -->
+    <model name="wall_i4">
+      <static>true</static>
+      <pose>15.5 -7.0 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>9.0 0.3 1.5</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>9.0 0.3 1.5</size></box></geometry>
+          <material>
+            <ambient>0.60 0.58 0.55 1</ambient>
+            <diffuse>0.60 0.58 0.55 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ─── Obstacles / Pillars ──────────────────────────────────────── -->
+    <!-- Trụ cột: r=0.6m (lớn hơn cũ 0.5m) — dễ phát hiện bằng LiDAR  -->
+    <!-- Đặt xa góc và xa goal đủ 3m clearance                          -->
+
+    <model name="pillar_a">
+      <static>true</static>
+      <pose>-13.0 -13.0 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><cylinder><radius>0.6</radius><length>1.5</length></cylinder></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><cylinder><radius>0.6</radius><length>1.5</length></cylinder></geometry>
+          <material>
+            <ambient>0.70 0.45 0.25 1</ambient>
+            <diffuse>0.70 0.45 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="pillar_b">
+      <static>true</static>
+      <pose>13.0 13.0 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><cylinder><radius>0.6</radius><length>1.5</length></cylinder></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><cylinder><radius>0.6</radius><length>1.5</length></cylinder></geometry>
+          <material>
+            <ambient>0.70 0.45 0.25 1</ambient>
+            <diffuse>0.70 0.45 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="pillar_c">
+      <static>true</static>
+      <pose>-4.0 10.0 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><cylinder><radius>0.6</radius><length>1.5</length></cylinder></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><cylinder><radius>0.6</radius><length>1.5</length></cylinder></geometry>
+          <material>
+            <ambient>0.70 0.45 0.25 1</ambient>
+            <diffuse>0.70 0.45 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- <model name="pillar_d">
+      <static>true</static>
+      <pose>4.0 -10.0 0.75 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><cylinder><radius>0.6</radius><length>1.5</length></cylinder></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><cylinder><radius>0.6</radius><length>1.5</length></cylinder></geometry>
+          <material>
+            <ambient>0.70 0.45 0.25 1</ambient>
+            <diffuse>0.70 0.45 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model> -->
+
+    <!-- Crates (hộp chướng ngại) -->
+    <model name="crate_1">
+      <static>true</static>
+      <pose>-14.0 12.0 0.5 0 0 0.3</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>1.2 1.2 1.0</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>1.2 1.2 1.0</size></box></geometry>
+          <material>
+            <ambient>0.55 0.38 0.22 1</ambient>
+            <diffuse>0.55 0.38 0.22 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- <model name="crate_2">
+      <static>true</static>
+      <pose>14.0 -12.0 0.5 0 0 -0.5</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>1.4 1.0 1.0</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>1.4 1.0 1.0</size></box></geometry>
+          <material>
+            <ambient>0.55 0.38 0.22 1</ambient>
+            <diffuse>0.55 0.38 0.22 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model> -->
+
+    <include>
+      <pose>14.0 -12.0 0 0 0 -0.5</pose>
+      <uri>https://fuel.gazebosim.org/1.0/athackst/models/bicycle</uri>
+      <name>bicycle</name>
+    </include>
+
+
+
+    <!-- <model name="crate_3">
+      <static>true</static>
+      <pose>-10.0 -4.0 0.5 0 0 0.8</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>1.0 1.2 1.0</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>1.0 1.2 1.0</size></box></geometry>
+          <material>
+            <ambient>0.55 0.38 0.22 1</ambient>
+            <diffuse>0.55 0.38 0.22 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model> -->
+
+    <!-- Car obstacle (placed near east edge, away from map center) -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/SUV</uri>
+      <name>car_1</name>
+      <pose>-10.0 -4.0 -0.05 0 0 0.8</pose>
+    </include>
+
+
+    <!--obstacles (hộp, trụ, cầu thấp)-->
+    <model name="low_box_obstacle">
+      <static>true</static>
+      <pose>3.0 3.0 0.1 0 0 0.5</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><box><size>0.4 0.3 0.2</size></box></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><box><size>0.4 0.3 0.2</size></box></geometry>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient> <diffuse>0.8 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="low_cylinder_obstacle">
+      <static>true</static>
+      <pose>-5.0 -6.0 0.125 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><cylinder><radius>0.2</radius><length>0.25</length></cylinder></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><cylinder><radius>0.2</radius><length>0.25</length></cylinder></geometry>
+          <material>
+            <ambient>0.2 0.8 0.2 1</ambient> <diffuse>0.2 0.8 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="low_sphere_obstacle">
+      <static>true</static>
+      <pose>8.0 -2.0 0.15 0 0 0</pose>
+      <link name="link">
+        <collision name="c">
+          <geometry><sphere><radius>0.15</radius></sphere></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><sphere><radius>0.15</radius></sphere></geometry>
+          <material>
+            <ambient>0.2 0.2 0.8 1</ambient> <diffuse>0.2 0.2 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+
+
+    <!-- Human obstacle (placed near west edge, away from map center) -->
+    <!-- <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Walking%20person</uri>
+      <name>human_1</name>
+      <pose>4.0 -10.0 0.75 0 0 0</pose>
+    </include> -->
+
+    <actor name="human_1">
+      <pose>0.0 0.0 0.0 0 0 0</pose>
+      
+      <skin>
+        <filename>/home/tinvo/.gz/fuel/fuel.gazebosim.org/openrobotics/models/walking person/3/meshes/walking.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+
+      <animation name="walking">
+        <filename>/home/tinvo/.gz/fuel/fuel.gazebosim.org/openrobotics/models/walking person/3/meshes/walking.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+
+      <script>
+        <loop>true</loop>
+        <delay_start>0.0</delay_start>
+        <auto_start>true</auto_start>
+        
+        <trajectory id="0" type="walking">
+          <waypoint>
+            <time>0.0</time>
+            <pose>4.0 -10.0 0.0 0 0 0</pose>
+          </waypoint>
+          <waypoint>
+            <time>15.0</time>
+            <pose>6.0 -10.0 0.0 0 0 0</pose>
+          </waypoint>
+          <waypoint>
+            <time>30.0</time>
+            <pose>4.0 -10.0 0.0 0 0 3.1416</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+
+  </world>
+</sdf>

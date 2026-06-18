@@ -1,0 +1,73 @@
+---
+# Clock
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# Command Velocity
+# - ros_topic_name: "/cmd_vel"
+#   gz_topic_name: "/model/rover_ackermann/cmd_vel"
+#   ros_type_name: "geometry_msgs/msg/Twist"
+#   gz_type_name: "gz.msgs.Twist"
+#   direction: ROS_TO_GZ
+
+# Odometry
+- ros_topic_name: "/odom"
+  gz_topic_name: "/model/rover_ackermann/odometry"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "gz.msgs.Odometry"
+  direction: GZ_TO_ROS
+
+# LiDAR
+# - ros_topic_name: "/scan"
+- ros_topic_name: "/scan_raw"
+  gz_topic_name: "/world/nav_world/model/rover_ackermann_0/model/lidar_2d_v2_sensor/link/link/sensor/lidar_2d_v2/scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+
+# IMU
+- ros_topic_name: "/imu"
+  gz_topic_name: "/world/nav_world/model/rover_ackermann_0/link/base_link/sensor/imu_sensor/imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS
+
+# Camera (Được chuyển qua sử dụng ros_gz_image cho tối ưu)
+# - ros_topic_name: "/camera/image_raw"
+#   gz_topic_name: "/front_camera/image"
+#   ros_type_name: "sensor_msgs/msg/Image"
+#   gz_type_name: "gz.msgs.Image"
+#   direction: GZ_TO_ROS
+
+# NavSat / GPS
+- ros_topic_name: "/gps/fix"
+  gz_topic_name: "/world/nav_world/model/rover_ackermann_0/link/base_link/sensor/navsat_sensor/navsat"
+  ros_type_name: "sensor_msgs/msg/NavSatFix"
+  gz_type_name: "gz.msgs.NavSat"
+  direction: GZ_TO_ROS
+
+# Sonar / Ultrasonic (Front)
+# Gazebo data is bridged as raw input. sensor_preprocessor.py republishes
+# the costmap-facing topic at /sonar_front/scan with a canonical frame_id.
+- ros_topic_name: "/sonar_front/scan_raw"
+  gz_topic_name: "/sonar_front/scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+
+# Sonar / Ultrasonic (Rear)
+- ros_topic_name: "/sonar_rear/scan_raw"
+  gz_topic_name: "/sonar_rear/scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+
+# Camera Info
+- ros_topic_name: "/camera/camera_info"
+  gz_topic_name: "/front_camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS

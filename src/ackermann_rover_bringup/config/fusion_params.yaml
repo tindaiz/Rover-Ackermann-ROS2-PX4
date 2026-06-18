@@ -1,0 +1,20 @@
+yolo_detector_node:
+  ros__parameters:
+    use_sim_time: True
+    model_path: "yolov8n.pt"
+    image_topic: "model_input/image_processed"
+    confidence_threshold: 0.5
+    rate_limit_hz: 5.0            # Giảm từ 10Hz: giải phóng CPU cho Nav2 planner/controller
+
+semantic_fusion_node:
+  ros__parameters:
+    use_sim_time: True
+    semantic_policy: ["person", "car", "bicycle", "bus", "truck", "motorcycle", "sports ball", "unknown"]
+    persistence_timeout: 1.0    
+    camera_height_offset: -0.2
+    camera_ground_height: 0.2
+    distance_match_threshold: 0.6  
+    inflation_classes: ["person", "car", "truck", "bus", "bicycle", "motorcycle", "sports ball", "unknown"]
+    inflation_radii: [1.0, 0.8, 0.8, 0.8, 0.6, 0.6, 0.3, 0.4]
+    goal_proximity_threshold: 1.5
+

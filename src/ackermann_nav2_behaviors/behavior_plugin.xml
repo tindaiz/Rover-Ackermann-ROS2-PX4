@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="ackermann_turnaround">
+    <class name="ackermann_nav2_behaviors/AckermannTurnAround" 
+           type="ackermann_nav2_behaviors::AckermannTurnAround" 
+           base_class_type="nav2_core::Behavior">
+      <description>Thực hiện thao tác lùi và tiến zigzag để mở góc cho xe Ackermann</description>
+    </class>
+  </library>
+</class_libraries> 
