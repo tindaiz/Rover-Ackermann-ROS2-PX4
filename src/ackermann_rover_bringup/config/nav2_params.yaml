@@ -27,9 +27,8 @@ amcl:
 
 bt_navigator:
   ros__parameters:
-    bt_loop_duration: 200          # Tăng từ 100ms: cho BT nhiều thời gian hơn mỗi tick (giảm WARN exceeded)
-    action_server_result_timeout: 20.0  # Tăng từ 5s: chờ planner lâu hơn trước khi timeout
-    use_sim_time: True
+    bt_loop_duration: 200         
+    action_server_result_timeout: 20.0  
     global_frame: map
     robot_base_frame: base_link
     odom_topic: /odom
@@ -74,7 +73,7 @@ behavior_server:
       plugin: "ackermann_nav2_behaviors/AckermannTurnAround"
       reverse_speed: 0.2
       forward_speed: 0.2
-      angular_vel: 0.28 #tương đương với góc bẻ lái 35 độ!
+      angular_vel: 0.28 
       simulate_ahead_time: 2.0
 
     backup:
@@ -108,7 +107,7 @@ controller_server:
       plugin: "nav2_controller::PoseProgressChecker"
       required_movement_radius: 0.05
       required_movement_angle: 0.05
-      movement_time_allowance: 6.0    # Tăng nhẹ từ 3.0 -> 6.0 để bù trừ cho độ trễ CPU (tránh xe bị đánh dấu kẹt sai)
+      movement_time_allowance: 6.0   
 
     # Goal checker parameters
     general_goal_checker:
@@ -124,30 +123,30 @@ controller_server:
     #   footprint = 0.6 x 0.5m, mass ~ 22 kg
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
-      verbose: false                   # FIX WARN: đặt đúng namespace, tránh "Parameter controller_server.verbose not found"
-      time_steps: 28                   # N bước dự báo: 28 * dt=0.1s ≈ 2.8s nhìn trước
-      model_dt: 0.1                    # PHẢI = 1/controller_frequency = 1/10Hz = 0.1s
-      batch_size: 200                 # Giảm từ 300 xuống để giảm tải CPU khi chạy song song YOLO+Fusion+SLAM
-      ax_max: 1.0                      # Cho phép xe đề-pa và phanh dứt khoát hơn ở đỉnh chữ V
-      ax_min: -1.0                     # TĂNG phanh lên để xe có thể dừng khựng lại đúng đỉnh chữ V thay vì bị lố đà
-      ay_max: 0.0                      # Không có chuyển động ngang (non-holonomic)
-      az_max: 0.7                      # TĂNG từ 0.4: gia tốc góc cao hơn → bánh lái phản ứng nhanh hơn khi bẻ cua
-      vx_max: 0.8                      # Vận tốc tối đa tiến (m/s) - khớp với RPP desired_linear_vel
-      vx_min: -0.5                   # TĂNG từ -0.5: lùi nhanh hơn, vẫn an toàn với max_steer=0.6109 rad
-      vy_max: 0.0                      # Non-holonomic: không có vận tốc ngang
-      wz_max: 0.9                      # TĂNG từ 0.6: giới hạn vật lý = vx/r_min = 0.8/0.78 ≈ 1.03, dùng 0.9 để lái nhanh mà an toàn
-      iteration_count: 1               # Số vòng lặp MPPI mỗi bước (1 đủ cho real-time)
-      temperature: 0.3                 # Nhiệt độ softmax: thấp = bám quỹ đạo tốt nhất chặt hơn
-      gamma: 0.015                     # Hệ số giảm tầm ảnh hưởng theo thời gian
+      verbose: false                   
+      time_steps: 28               
+      model_dt: 0.1                  
+      batch_size: 200                
+      ax_max: 1.0                     
+      ax_min: -1.0                    
+      ay_max: 0.0               
+      az_max: 0.7                  
+      vx_max: 0.8                   
+      vx_min: -0.5                  
+      vy_max: 0.0                   
+      wz_max: 0.9                    
+      iteration_count: 1              
+      temperature: 0.3                 
+      gamma: 0.015                     
       motion_model: "Ackermann"        # Mô hình động học Ackermann
       # ---- THÔNG SỐ BẮT BUỘC cho Ackermann model ----
       # min_turning_r = wheel_base / tan(max_steer) = 0.5 / tan(0.6109) = 0.714m
       # Đồng bộ với RA_MAX_STR_ANG = 0.6109 rad (35°) trong PX4 airframe và SDF joint limit
       min_turning_r: 0.714             # Bán kính quay tối thiểu (m) - MPPI dùng để loại quỹ đạo vi phạm Ackermann kinematic
-      visualize: false                 # Publish quỹ đạo lên /trajectories để debug trong RViz2 (Tắt để giảm tải CPU)
+      visualize: false                
       transform_tolerance: 0.5
-      prune_distance: 1.5              # Cắt bỏ phần đường đã đi (m) - gần với lookahead RPP
-      regenerate_noises: false         # false = nhanh hơn, true = đa dạng hơn (nên thử)
+      prune_distance: 1.5            
+      regenerate_noises: false      
 
       # ---- Ackermann kinematics ----
       critics:
@@ -171,38 +170,38 @@ controller_server:
         enabled: true
         cost_power: 1
         cost_weight: 5.0
-        threshold_to_consider: 0.6    # Khi nào bắt đầu penalty goal (m) - khớp xy_goal_tolerance
+        threshold_to_consider: 0.6   
 
       GoalAngleCritic:
         enabled: false
         cost_power: 1
         cost_weight: 3.0
-        threshold_to_consider: 0.6   # Chỉ tính khi gần goal
+        threshold_to_consider: 0.6  
 
       PreferForwardCritic:
         enabled: false
         cost_power: 1
-        cost_weight: 2.0             # Tắt: không chống lại lùi quá mạnh khi path Reeds-Shepp yêu cầu lùi
+        cost_weight: 2.0           
 
       ObstaclesCritic:
         enabled: true
         cost_power: 1
         repulsion_weight: 1.5
         critical_weight: 20.0
-        consider_footprint: true     # Dùng footprint thực (0.6x0.5m) thay vì robot_radius
+        consider_footprint: true     
         collision_cost: 1000000.0
-        collision_margin_distance: 0.25 # TĂNG từ 0.1 lên 0.25 để giữ khoảng cách an toàn, tránh va quẹt
-        near_goal_distance: 0.5      # FIX: giảm từ 1.0 xuống để không tắt quá sớm gần goal
+        collision_margin_distance: 0.25 
+        near_goal_distance: 0.5    
 
       PathAlignCritic:
         enabled: true
         cost_power: 1
-        cost_weight: 8.0            # Giảm xuống để xe có thể đi lệch ra ngoài đường để né vật cản
+        cost_weight: 8.0            
         max_path_occupancy_ratio: 0.05
         trajectory_point_step: 3
-        threshold_to_consider: 0.8   # Chỉ tính khi chưa gần goal
+        threshold_to_consider: 0.8   
         offset_from_furthest: 20
-        use_path_orientations: true  # Quan trọng với Ackermann: tính hướng path
+        use_path_orientations: true 
 
       PathFollowCritic:
         enabled: true
@@ -217,8 +216,8 @@ controller_server:
         cost_weight: 2.0
         offset_from_furthest: 4
         threshold_to_consider: 0.6
-        max_angle_to_furthest: 1.309   # 75 deg - tăng từ 45°: chấp nhận góc lệch lớn hơn khi xe lùi
-        mode: 2                        # 2=consider_feasible_arc: MPPI tự chọn forward/reverse dựa theo path orientation
+        max_angle_to_furthest: 1.309   
+        mode: 2                       
 
       # ---- Noise (Gaussian perturbation cho sampling) ----
       # Trục v_x: noise thấp để xe không thay đổi tốc độ đột ngột
@@ -243,7 +242,7 @@ local_costmap:
       width: 5
       height: 5
       resolution: 0.05
-      footprint: "[ [0.60, 0.35], [0.60, -0.35], [-0.10, -0.35], [-0.10, 0.35] ]"  # FIX: mở rộng y=±0.35 bao phủ bánh xe (±0.30) + margin
+      footprint: "[ [0.60, 0.35], [0.60, -0.35], [-0.10, -0.35], [-0.10, 0.35] ]"  
       plugins: ["obstacle_layer", "semantic_layer", "sonar_front_layer", "sonar_rear_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -304,9 +303,9 @@ local_costmap:
           inf_is_valid: True
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.5  # Độ dốc giảm dần của chi phí (cao = giảm nhanh để xe dám đi qua khe hẹp)
-        inflation_radius: 0.85    # GIẢM từ 1.2 xuống để vòng tròn lạm phát nhỏ lại, tránh ép xe đi vòng quá xa
-      always_send_full_costmap: True  # Publish full map để debug dễ hơn
+        cost_scaling_factor: 3.5 
+        inflation_radius: 0.85    
+      always_send_full_costmap: True  
 
 global_costmap:
   global_costmap:
@@ -319,7 +318,7 @@ global_costmap:
       transform_tolerance: 1.0
       resolution: 0.05
       track_unknown_space: true
-      footprint: "[ [0.60, 0.35], [0.60, -0.35], [-0.10, -0.35], [-0.10, 0.35] ]"  # FIX: mở rộng y=±0.35 bao phủ bánh xe (±0.30) + margin
+      footprint: "[ [0.60, 0.35], [0.60, -0.35], [-0.10, -0.35], [-0.10, 0.35] ]" 
       plugins: ["static_layer", "obstacle_layer", "semantic_layer", "sonar_front_layer", "sonar_rear_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -394,8 +393,8 @@ planner_server:
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_smac_planner/SmacPlannerHybrid"
-      downsample_costmap: true    # Việc này giúp thuật toán quy hoạch gộp các ô 5cm thành ô 10cm để tìm đường thô trước, sau đó mới quy hoạch chi tiết trên đường thô
-      downsampling_factor: 2      # giảm kích thước grid costmap để tăng tốc độ lập kế hoạch
+      downsample_costmap: true   
+      downsampling_factor: 2     
       tolerance: 0.5
       allow_unknown: true
       max_iterations: 400000                      #1000000
@@ -404,10 +403,10 @@ planner_server:
       motion_model_for_search: "REEDS_SHEPP"   # "DUBIN"   # DUBIN (chỉ tiến) hoặc REEDS_SHEPP (cho phép lùi)
       angle_quantization_bins: 72
       minimum_turning_radius: 0.714       # bán kính xoay của xe = 0.5/tan(0.6109) — đồng bộ với MPPI và SDF joint limit (35°)
-      reverse_penalty:  2.1             # HẠ XUỐNG: để xe không quá sợ đi lùi
-      change_penalty: 0.25            # HẠ CỰC MẠNH: (mặc định của ROS2 là 0.05). 15.0 là quá cao khiến xe thà đi vòng rất xa chứ không chịu móc số lùi (K-turn)
-      non_straight_penalty: 1.2       # HẠ XUỐNG: để xe đánh lái vào cua mượt mà tự nhiên hơn
-      cost_penalty: 12.0  # Tăng mạnh: planner ưu tiên tránh vùng high-cost hơn đi tắt
+      reverse_penalty:  2.1            
+      change_penalty: 0.25           
+      non_straight_penalty: 1.2       
+      cost_penalty: 12.0  
       retrospective_penalty: 0.025
       lookup_table_size: 20.0
       cache_obstacle_heuristic: true
