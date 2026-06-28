@@ -4,10 +4,9 @@ Dự án này cấu hình và tích hợp một xe tự hành Ackermann (Ackerma
 
 ## Cấu trúc thư mục
 
-Workspace chứa các package ROS 2 chính sau (không bao gồm `rover_dashboard` và `m-explore-ros2`):
+Workspace chứa các package ROS 2 chính sau:
 
 - **Micro-XRCE-DDS-Agent**: Dùng để làm cầu nối giao tiếp DDS giữa PX4 và ROS 2.
-- **ackermann_iot_bridge**: Đảm nhiệm việc giao tiếp với các hệ thống IoT.
 - **ackermann_nav2_behaviors**: Chứa các behavior (hành vi) và plugin tùy chỉnh cho Nav2 như quay đầu xe (Ackermann turnaround), lùi xe (backup), v.v.
 - **ackermann_rover_bringup**: Chứa các launch file chính để khởi động toàn bộ hệ thống (robot state publisher, SLAM, Nav2, EKF, v.v.).
 - **ackermann_rover_msgs**: Các định nghĩa thông điệp (messages) ROS 2 tùy chỉnh riêng cho xe Ackermann.
@@ -16,12 +15,12 @@ Workspace chứa các package ROS 2 chính sau (không bao gồm `rover_dashboar
 
 ## Yêu cầu hệ thống (Prerequisites)
 
-- **OS**: Ubuntu (tương thích với phiên bản ROS 2 đang dùng, VD: Humble/Iron).
+- **OS**: Ubuntu 22.04 tương thích với phiên bản ROS 2 Humble.
 - **ROS 2**: Đã cài đặt đầy đủ (Desktop version).
 - **PX4 Autopilot**: Đã được clone và cấu hình (đặt tại `~/PX4-Autopilot`).
 - **Micro-XRCE-DDS-Agent**: Đã được cài đặt và build.
 
-## Hướng dẫn sử dụng
+## Hướng dẫn
 
 ### 1. Build không gian làm việc (Workspace)
 
