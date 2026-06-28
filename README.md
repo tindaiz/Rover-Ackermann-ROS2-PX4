@@ -1,4 +1,4 @@
-# Rover Ackermann
+# Rover Ackermann ROS2-PX4
 
 Dự án này cấu hình và tích hợp một xe tự hành Ackermann (Ackermann Rover) sử dụng hệ sinh thái ROS 2, PX4 Autopilot (Gazebo SITL), và Nav2 để thực hiện các nhiệm vụ điều hướng, lập bản đồ và mô phỏng.
 
