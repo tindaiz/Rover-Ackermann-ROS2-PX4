@@ -11,14 +11,14 @@
           <RecoveryNode number_of_retries="1" name="ComputePathThroughPoses">
             <ReactiveSequence>
               <RemovePassedGoals input_goals="{goals}" output_goals="{goals}" radius="0.7"/>
-              <ComputePathThroughPoses goals="{goals}" path="{path}" planner_id="GridBased" server_timeout="2000"/>
+              <ComputePathThroughPoses goals="{goals}" path="{path}" planner_id="GridBased" server_timeout="5000"/>
             </ReactiveSequence>
-            <ClearEntireCostmap name="ClearGlobalCostmap-Context" service_name="global_costmap/clear_entirely_global_costmap"/>
+            <ClearEntireCostmap name="ClearGlobalCostmap-Context" service_name="global_costmap/clear_entirely_global_costmap" server_timeout="5000"/>
           </RecoveryNode>
         </RateController>
 <!-- 
         <RecoveryNode number_of_retries="1" name="FollowPath"> -->
-          <FollowPath path="{path}" controller_id="FollowPath"/>
+          <FollowPath path="{path}" controller_id="FollowPath" server_timeout="5000"/>
           <!-- <Sequence name="FollowPathRecoveryActions">
             <BackUp backup_dist="0.40" backup_speed="0.1"/>
             <ClearEntireCostmap name="ClearLocalCostmap-Context" service_name="local_costmap/clear_entirely_local_costmap"/>
@@ -32,14 +32,14 @@
         <GoalUpdated/>
         <RoundRobin name="RecoveryActions">
           <Sequence name="ClearingActions">
-            <ClearEntireCostmap name="ClearLocalCostmap-Subtree" service_name="local_costmap/clear_entirely_local_costmap"/>
-            <ClearEntireCostmap name="ClearGlobalCostmap-Subtree" service_name="global_costmap/clear_entirely_global_costmap"/>
+            <ClearEntireCostmap name="ClearLocalCostmap-Subtree" service_name="local_costmap/clear_entirely_local_costmap" server_timeout="5000"/>
+            <ClearEntireCostmap name="ClearGlobalCostmap-Subtree" service_name="global_costmap/clear_entirely_global_costmap" server_timeout="5000"/>
           </Sequence>
           <!-- <BackUp name="AckermannTurnAround" server_name="ackermann_turnaround" backup_dist="0.4" backup_speed="0.2"/> -->
-          <Wait wait_duration="2"/>
-          <Spin name="AckermannTurnAround" server_name="ackermann_turnaround" spin_dist="1.0"/>
-          <Wait wait_duration="5"/>
-          <BackUp backup_dist="0.50" backup_speed="0.1"/>
+          <Wait wait_duration="2" server_timeout="5000"/>
+          <Spin name="AckermannTurnAround" server_name="ackermann_turnaround" spin_dist="1.0" server_timeout="5000"/>
+          <Wait wait_duration="5" server_timeout="5000"/>
+          <BackUp backup_dist="0.50" backup_speed="0.1" server_timeout="5000"/>
         </RoundRobin>
       </ReactiveFallback>
     </RecoveryNode>
