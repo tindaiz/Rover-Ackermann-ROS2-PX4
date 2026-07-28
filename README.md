@@ -1,59 +1,89 @@
 # Rover Ackermann ROS2-PX4
 
-Dự án này cấu hình và tích hợp một xe tự hành Ackermann (Ackermann Rover) sử dụng hệ sinh thái ROS 2, PX4 Autopilot (Gazebo SITL), và Nav2 để thực hiện các nhiệm vụ điều hướng, lập bản đồ và mô phỏng.
+This project configures and integrates an Ackermann autonomous rover using the ROS 2 ecosystem, PX4 Autopilot (Gazebo SITL), SLAM, and Nav2 to perform navigation, mapping, and simulation tasks.
 
-## Cấu trúc thư mục
+## Project Structure
 
-Workspace chứa các package ROS 2 chính sau:
+The workspace contains the following main ROS 2 packages:
 
-- **Micro-XRCE-DDS-Agent**: Dùng để làm cầu nối giao tiếp DDS giữa PX4 và ROS 2.
-- **ackermann_nav2_behaviors**: Chứa các behavior (hành vi) và plugin tùy chỉnh cho Nav2 như quay đầu xe (Ackermann turnaround), lùi xe (backup), v.v.
-- **ackermann_rover_bringup**: Chứa các launch file chính để khởi động toàn bộ hệ thống (robot state publisher, SLAM, Nav2, EKF, v.v.).
-- **ackermann_rover_msgs**: Các định nghĩa thông điệp (messages) ROS 2 tùy chỉnh riêng cho xe Ackermann.
-- **px4-ros2-interface-lib**: Thư viện hỗ trợ chuyển đổi dữ liệu và tương tác giữa PX4 và ROS 2.
-- **px4_msgs**: Định nghĩa thông điệp uORB của PX4 biên dịch sang ROS 2.
+```text
+rover_ackermann/
+│
+├── src/                          # Directory containing ROS 2 packages and related libraries
+│   ├── ackermann_iot_bridge/    # IoT communication bridge for the Ackermann rover
+│   ├── ackermann_nav2_behaviors/# Custom behavior and plugin support for Nav2
+│   ├── ackermann_rover_bringup/ # Launch files and startup configuration for the system
+│   ├── ackermann_rover_msgs/    # Custom ROS 2 message definitions
+│   ├── m-explore-ros2/          # Extended map exploration library
+│   ├── Micro-XRCE-DDS-Agent/    # DDS bridge between PX4 and ROS 2
+│   ├── px4-ros2-interface-lib/  # Integration library for PX4 and ROS 2
+│   └── px4_msgs/                # PX4 message definitions exposed to ROS 2
+│
+├── results/                      # Experimental results and trajectory records
+├── video/                        # Simulation or experiment videos
+├── run_all.sh                    # Script to start the full system
+├── run_all_map_behaviors.sh      # Script for navigation mode with behaviors
+├── README.md                     # Project documentation
+└── yolov8n.pt                    # Object detection model used in the project
+```
 
-## Yêu cầu hệ thống (Prerequisites)
 
-- **OS**: Ubuntu 22.04 tương thích với phiên bản ROS 2 Humble.
-- **ROS 2**: Đã cài đặt đầy đủ (Desktop version).
-- **PX4 Autopilot**: Đã được clone và cấu hình (đặt tại `~/PX4-Autopilot`).
-- **Micro-XRCE-DDS-Agent**: Đã được cài đặt và build.
 
-## Hướng dẫn
 
-### 1. Build không gian làm việc (Workspace)
+## Features
 
-Mở terminal, di chuyển vào thư mục workspace và tiến hành build bằng `colcon`:
+### 1. Ackermann Steering
+Implements Ackermann steering geometry for the rover, providing precise control over vehicle movement. The steering model accounts for front wheel angle and rear axle position to achieve accurate trajectory tracking.
 
-```bash
+### 2. ROS2 - PX4
+Seamless integration between ROS 2 and PX4 Autopilot through Micro-XRCE-DDS bridge. Enables communication between high-level navigation tasks in ROS 2 and low-level vehicle control in PX4.
+
+### 3. Sensor
+Equipped with multiple sensors including:
+- **LiDAR**: 2D laser scanner for obstacle detection and mapping
+- **Camera**: Front-facing camera for visual perception
+- **IMU**: Inertial measurement unit for attitude estimation
+- **GPS**: GNSS positioning 
+- **Odometry**: Wheel encoders for odometry estimation
+
+### 4. SLAM
+SLAM Toolbox integration enables simultaneous localization and mapping. The rover can build a map of its environment while determining its position within that map in real-time.
+
+### 5. Navigation
+Nav2 framework provides autonomous navigation capabilities including:
+- Path planning and trajectory optimization
+- Obstacle avoidance and recovery behaviors
+- Waypoint navigation and goal management
+
+### 6. Visualization
+RViz2 visualization tool displays:
+- Real-time sensor data (LiDAR scans, camera feed)
+- Transformation frames (TF tree)
+- Planned paths and trajectories
+- Cost maps and navigation states
+
+
+## Requirements
+
+- **OS**: Ubuntu 22.04
+- **ROS 2**: ROS 2 Humble
+- **PX4 Autopilot**: v1.16
+- **Micro-XRCE-DDS-Agent**: v3.0.1
+
+
+## Usage
+
+### Build workspace
+
+"
 cd ~/rover_ackermann
 colcon build
 source install/setup.bash
-```
+"
 
-### 2. Khởi chạy dự án
 
-Dự án có sẵn các script tự động mở nhiều tab terminal để khởi chạy PX4 SITL (Gazebo), Micro-XRCE-DDS-Agent, và ROS 2 Bringup. 
+## TF Tree
 
-- **Chế độ Lập bản đồ và Điều hướng (Mapping & Nav):**
-  Chạy script `run_all.sh` với tên map (mặc định là `nav_world`).
-  ```bash
-  ./run_all.sh nav_world
-  ```
-  Quá trình này sẽ:
-  1. Mở PX4 SITL Gazebo với xe Ackermann.
-  2. Bật MicroXRCEAgent (udp4 cổng 8888).
-  3. Chạy ROS 2 launch file (`mapping_and_nav.launch.py`).
+![TF Tree](images/tf_tree.png) 
 
-- **Chế độ Điều hướng độc lập (Pure Navigation):**
-  Chạy script `run_all_map_behaviors.sh` để bắt đầu với tọa độ và cấu hình riêng phục vụ cho điều hướng.
-  ```bash
-  ./run_all_map_behaviors.sh nav_world
-  ```
-  Script này sẽ spawn robot ở vị trí cụ thể (VD: x=5.5, y=10.0) và chạy `pure_navigation.launch.py`.
 
-## Tương tác và Điều khiển
-
-- Hệ thống sử dụng Nav2 cho việc lập kế hoạch đường đi và các hành vi phục hồi (recovery behaviors).
-- Sử dụng **RViz2** để thiết lập mục tiêu (2D Goal Pose) và quan sát cảm biến (LiDAR, TF tree, v.v.).
