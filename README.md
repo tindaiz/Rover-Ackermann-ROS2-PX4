@@ -90,7 +90,10 @@ This mode uses a previously scanned map for autonomous navigation. The rover loc
 ./run_all_map_behaviors.sh 
 ```
 
-![Behaviors](video/behaviors.mp4)
+<video controls width="640" height="360">
+	<source src="video/behaviors.mp4" type="video/mp4">
+	Your browser does not support the video tag.
+</video>
 
 
 ## TF Tree
