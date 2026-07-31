@@ -20,9 +20,8 @@ rover_ackermann/
 │   └── px4_msgs/                # PX4 message definitions exposed to ROS 2
 │
 ├── results/                      # Experimental results and trajectory records
-├── video/                        # Simulation or experiment videos
+├── video/                        # Simulation videos
 ├── run_all.sh                    # Script to start the full system
-├── run_all_map_behaviors.sh      # Script for navigation mode with behaviors
 ├── README.md                     # Project documentation
 └── yolov8n.pt                    # Object detection model used in the project
 ```
@@ -88,10 +87,10 @@ source install/setup.bash
 This mode uses a previously scanned map for autonomous navigation. The rover localizes itself on the existing map and performs path planning without needing to build a new map.
 
 ```bash
-./run_all_map_behaviors.sh nav_world
+./run_all_map_behaviors.sh 
 ```
 
-
+![Behaviors](video/behaviors.mp4)
 
 
 ## TF Tree
