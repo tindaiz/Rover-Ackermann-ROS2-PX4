@@ -104,6 +104,10 @@ To run SLAM while navigating on the map currently being built, use the `run_all.
 The script starts PX4 SITL + Gazebo, launches the Micro-XRCE-DDS Agent, and then runs the ROS 2 bringup (`ackermann_rover_bringup`) with `mapping_and_nav.launch.py`, which performs SLAM (map building) and Nav2-based navigation on the live map.
 
 
+https://github.com/user-attachments/assets/203a5db1-8324-40c6-a1a7-f1a70d7f3681
+
+
+
 ### Navigation with Pre-built Map
 
 This mode uses a previously scanned map for autonomous navigation. The rover localizes itself on the existing map and performs path planning without needing to build a new map.
@@ -111,7 +115,7 @@ This mode uses a previously scanned map for autonomous navigation. The rover loc
 ```bash
 ./run_all_map_behaviors.sh [map_name]
 ```
-
+https://github.com/user-attachments/assets/db242137-ca6a-4d32-b88c-1c86829744ff
 
 ## TF Tree
 
