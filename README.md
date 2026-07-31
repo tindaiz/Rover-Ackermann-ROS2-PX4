@@ -75,7 +75,7 @@ RViz2 visualization tool displays:
 Clone PX4 following the official PX4 instructions. Example:
 
 ```bash
-git clone https://github.com/PX4/PX4-Autopilot.git ~/PX4-Autopilot
+git clone https://github.com/PX4/PX4-Autopilot.git 
 cd ~/PX4-Autopilot
 git submodule update --init --recursive
 ```
