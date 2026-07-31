@@ -72,6 +72,16 @@ RViz2 visualization tool displays:
 
 ## Usage
 
+Clone PX4 following the official PX4 instructions. Example:
+
+```bash
+git clone https://github.com/PX4/PX4-Autopilot.git ~/PX4-Autopilot
+cd ~/PX4-Autopilot
+git submodule update --init --recursive
+```
+
+Note: Install dependencies and the required toolchain as described in the PX4 documentation before building.
+
 ### Build workspace
 
 ```bash
