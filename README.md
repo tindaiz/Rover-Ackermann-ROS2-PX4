@@ -81,20 +81,26 @@ source install/setup.bash
 ```
 
 ### SLAM & Navigation
+This workspace provides a script to run SLAM and navigation together on a live map.
+
+#### Run SLAM + Navigation (live mapping)
+
+To run SLAM while navigating on the map currently being built, use the `run_all.sh` script:
+
+```bash
+./run_all.sh [map_name]
+```
+
+The script starts PX4 SITL + Gazebo, launches the Micro-XRCE-DDS Agent, and then runs the ROS 2 bringup (`ackermann_rover_bringup`) with `mapping_and_nav.launch.py`, which performs SLAM (map building) and Nav2-based navigation on the live map.
+
 
 ### Navigation with Pre-built Map
 
 This mode uses a previously scanned map for autonomous navigation. The rover localizes itself on the existing map and performs path planning without needing to build a new map.
 
 ```bash
-./run_all_map_behaviors.sh 
+./run_all_map_behaviors.sh [map_name]
 ```
-
-<video controls width="640" height="360">
-	<source src="https://github.com/tindaiz/Rover-Ackermann-ROS2-PX4/blob/main/video/behaviors.mp4" type="video/mp4">
-	Your browser does not support the video tag. You can download it <a href="video/behaviors.mp4">here</a>.
-</video>
-
 
 
 ## TF Tree
