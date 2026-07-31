@@ -91,7 +91,7 @@ This mode uses a previously scanned map for autonomous navigation. The rover loc
 ```
 
 <video controls width="640" height="360">
-	<source src="video/behaviors.mp4" type="video/mp4">
+	<source src="https://github.com/tindaiz/Rover-Ackermann-ROS2-PX4/blob/main/video/behaviors.mp4" type="video/mp4">
 	Your browser does not support the video tag. You can download it <a href="video/behaviors.mp4">here</a>.
 </video>
 
