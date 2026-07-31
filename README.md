@@ -75,15 +75,27 @@ RViz2 visualization tool displays:
 
 ### Build workspace
 
-"
+```bash
 cd ~/rover_ackermann
 colcon build
 source install/setup.bash
-"
+```
+
+### SLAM & Navigation
+
+### Navigation with Pre-built Map
+
+This mode uses a previously scanned map for autonomous navigation. The rover localizes itself on the existing map and performs path planning without needing to build a new map.
+
+```bash
+./run_all_map_behaviors.sh nav_world
+```
+
+
 
 
 ## TF Tree
 
-![TF Tree](images/tf_tree.png) 
+![TF Tree](tf_tree.png) 
 
 
